@@ -490,19 +490,7 @@ void DetectorConstruction::SetAbsorMaterial(const G4String& material)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::ConstructSDandField()
-{
-    if ( fFieldMessenger.Get() == 0 ) {
-        // Create global magnetic field messenger.
-        // Uniform magnetic field is then created automatically if
-        // the field value is not zero.
-        G4ThreeVector fieldValue = G4ThreeVector();
-        G4GlobalMagFieldMessenger* msg =
-        new G4GlobalMagFieldMessenger(fieldValue);
-        //msg->SetVerboseLevel(1);
-        G4AutoDelete::Register(msg);
-        fFieldMessenger.Put( msg );
-    }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
