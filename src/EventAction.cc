@@ -60,6 +60,8 @@ void EventAction::BeginOfEventAction(const G4Event*)
   fPhotonCount = 0.0;
   fPhotonCountEnd = 0.0;
   TotalEdepEvent = 0.0;
+  qenergy = 0.0;
+  nhits = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,9 +78,7 @@ void EventAction::EndOfEventAction(const G4Event*)
   for (G4int k=1; k<=fDetector->GetNbOfAbsor(); k++) {
     if (fEdepAbsor[k] > 0.) {
       run->AddEdep(k,fEdepAbsor[k]);
-   //  G4AnalysisManager::Instance()->FillH1(k, fEdepAbsor[k]);
       TotalEdep += fEdepAbsor[k];
-    //  TotalEdepEvent += fEdepAbsor[k];
     }
   }
   
@@ -86,9 +86,17 @@ void EventAction::EndOfEventAction(const G4Event*)
     run->AddTotEdep(TotalEdep);
   }
 
-  G4AnalysisManager::Instance()->FillH1(12, fPhotonCount);
-  G4AnalysisManager::Instance()->FillH1(13, fPhotonCountEnd);
+
+   // G4double qe = 0.3;                      // quantum efficiency of photocathode
+    G4double p2c = 0.38;                 // photon-to-charge ratio (gain)
+    G4double q_dep = fPhotonCount * p2c; //* qe;      // deposited charge
+
+
+  G4AnalysisManager::Instance()->FillH1(12, q_dep);
+  //G4AnalysisManager::Instance()->FillH1(13, fPhotonCountEnd);
   G4AnalysisManager::Instance()->FillH1(14, TotalEdepEvent);
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

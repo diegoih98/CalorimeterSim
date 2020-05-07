@@ -97,7 +97,7 @@ ElectromagneticPhysics::~ElectromagneticPhysics()
 
 void ElectromagneticPhysics::ConstructProcess()
 {
-
+/*
   theCerenkovProcess           = new G4Cerenkov("Cerenkov");
   theScintillationProcess      = new G4Scintillation("Scintillation");
   theAbsorptionProcess         = new G4OpAbsorption();
@@ -109,7 +109,7 @@ void ElectromagneticPhysics::ConstructProcess()
 
   theCerenkovProcess->SetMaxNumPhotonsPerStep(300);
   theCerenkovProcess->SetMaxBetaChangePerStep(10.0);
-  theCerenkovProcess->SetTrackSecondariesFirst(true);
+  theCerenkovProcess->SetTrackSecondariesFirst(true);*/
 
 
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
@@ -124,7 +124,7 @@ void ElectromagneticPhysics::ConstructProcess()
     G4String particleName = particle->GetParticleName();
  
 
-    if (theCerenkovProcess->IsApplicable(*particle)) {
+   /* if (theCerenkovProcess->IsApplicable(*particle)) {
       pmanager->AddProcess(theCerenkovProcess);
       pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
     }
@@ -135,7 +135,7 @@ void ElectromagneticPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
       pmanager->AddDiscreteProcess(theMieHGScatteringProcess);
       pmanager->AddDiscreteProcess(theBoundaryProcess);
-    }
+    }*/
 
 
     
@@ -145,10 +145,10 @@ void ElectromagneticPhysics::ConstructProcess()
       ph->RegisterProcess(new G4ComptonScattering,   particle);
       ph->RegisterProcess(new G4GammaConversion,     particle);
 
-      pmanager->AddDiscreteProcess(theAbsorptionProcess);
+    /*  pmanager->AddDiscreteProcess(theAbsorptionProcess);
       pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
       pmanager->AddDiscreteProcess(theMieHGScatteringProcess);
-      pmanager->AddDiscreteProcess(theBoundaryProcess);
+      pmanager->AddDiscreteProcess(theBoundaryProcess);*/
        
     } else if (particleName == "e-") {
     
@@ -203,56 +203,6 @@ void ElectromagneticPhysics::ConstructProcess()
     }
   }
 }
-
-/*void ElectromagneticPhysics::ConstructOp()
-{
-  theCerenkovProcess           = new G4Cerenkov("Cerenkov");
-  theScintillationProcess      = new G4Scintillation("Scintillation");
-  theAbsorptionProcess         = new G4OpAbsorption();
-  theRayleighScatteringProcess = new G4OpRayleigh();
-  theMieHGScatteringProcess    = new G4OpMieHG();
-  theBoundaryProcess           = new G4OpBoundaryProcess();*/
-
-//  theCerenkovProcess->DumpPhysicsTable();
-//  theScintillationProcess->DumpPhysicsTable();
-//  theRayleighScatteringProcess->DumpPhysicsTable();
-
-  //SetVerbose(1);
-
- /* theCerenkovProcess->SetMaxNumPhotonsPerStep(300);
-  theCerenkovProcess->SetMaxBetaChangePerStep(10.0);
-  theCerenkovProcess->SetTrackSecondariesFirst(true);*/
-
-  // Use Birks Correction in the Scintillation process
-/*
-  auto theParticleIterator=GetParticleIterator();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-    if (theCerenkovProcess->IsApplicable(*particle)) {
-      pmanager->AddProcess(theCerenkovProcess);
-      pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
-    }
-   if (particleName == "opticalphoton") {
-      G4cout << " AddDiscreteProcess to OpticalPhoton " << G4endl;
-      pmanager->AddDiscreteProcess(theAbsorptionProcess);
-      pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
-      pmanager->AddDiscreteProcess(theMieHGScatteringProcess);
-      pmanager->AddDiscreteProcess(theBoundaryProcess);
-    }
-
-    if (particleName == "gamma") {
-      G4cout << " AddDiscreteProcess to Gamma " << G4endl;
-      pmanager->AddDiscreteProcess(theAbsorptionProcess);
-      pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
-      pmanager->AddDiscreteProcess(theMieHGScatteringProcess);
-      pmanager->AddDiscreteProcess(theBoundaryProcess);
-    }
-  }
-
-}*/
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

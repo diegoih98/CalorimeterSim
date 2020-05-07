@@ -89,7 +89,6 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 // G4int iabs = prePoint->GetTouchableHandle()->GetCopyNumber(0); 
   const G4VPhysicalVolume* pv = prePoint->GetPhysicalVolume();
     G4int copyNo = pv->GetCopyNo();
- //if (iabs > 0) fEventAction->AddEdep(iabs, edep);
    fEventAction->AddEdep(copyNo, edep/MeV);
 }
 

@@ -64,16 +64,16 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);
 
   // Define histograms start values
-  const G4int kMaxHisto = 15;
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                         "10","11","12","13","14","15","16","17","18","19",
-                         "20","21","22"};
+  const G4int kMaxHisto = 16;
+  const G4String id[] = { "f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9",
+                         "f10","f11","f12","f13","f14","f15","f16","f17","f18","f19",
+                         "f20","f21","f22"};
 
   const G4String title[] = 
                 { "dummy",                                        //0
-                  "Energy of Gamma produced in Pb glass counter 1 (MeV)",         //1
-                  "Energy of Gamma produced in Pb glass counter 2 (MeV)",         //2
-                  "Energy of Gamma produced in Pb glass counter 3 (MeV)",         //3
+                  "PhotonsProducedSpectrum",         //1
+                  "PhotonReachingPMTSpectrum",         //2
+                  "PhotonsDetectedSpectrum",         //3
                   "Energy of Gamma produced in Pb glass counter 4 (MeV)",         //4
                   "Energy of Gamma produced in Pb glass counter 5 (MeV)",         //5
                   "Energy of Gamma produced in Pb glass counter 6 (MeV)",         //6
@@ -83,8 +83,10 @@ void HistoManager::Book()
                   "Edep (MeV/mm) along calorimeter",                 //10
                   "Energy of photons (MeV) emerging the Pb glass", //11
                   "Number of photons produced per event", //12
-                  "Number of photons emerging per event", //13
-                  "Energy Spectrum" //14
+                  //"Number of photons emerging per event", //13
+                  "Photoelectrons", //13
+                  "Energy Spectrum", //14
+                  "Energy detected", //15
                  };
 
   // Default values (to be reset via /analysis/h1/set command)
@@ -92,9 +94,9 @@ void HistoManager::Book()
   G4double vmin = 0.;
   G4double vmax = 100.;
 
-  // Create all histograms as inactivated 
+ /* // Create all histograms as inactivated 
   // as we have not yet set nbins, vmin, vmax
- /* for (G4int k=0; k<kMaxHisto; k++) {
+  for (G4int k=0; k<kMaxHisto; k++) {
     G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
    analysisManager->SetH1Activation(ih, false);
   }*/

@@ -78,6 +78,7 @@ private:
   private:
     DetectorConstruction*  fDetector;
     G4ParticleDefinition*  fParticle;
+
     G4double  fEkin; 
 
     G4int      fStatus[3];

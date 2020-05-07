@@ -62,10 +62,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
         G4RunManager::GetRunManager()->GetNonConstCurrentRun());    
   if(iabs > 0){
      run->ParticleCount(iabs,name,energy);
-       if(name == "gamma"){
-        // if(name == "opticalphoton"){
-          G4AnalysisManager::Instance()->FillH1(iabs, energy);
+         if(name == "opticalphoton"){
           fEventAction->AddPhoton();
+          G4AnalysisManager::Instance()->FillH1(1, energy);
           }
      }
 }
@@ -99,12 +98,6 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   run->ParticleCount(0,name,energy);
 
 G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    if(name == "gamma"){
-    //if(name == "opticalphoton"){
-    analysisManager->FillH1(11, energy);
-    fEventAction->AddPhotonEnd();
-    }
- ////G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

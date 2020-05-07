@@ -47,8 +47,9 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class DetectorMessenger;
+//class EventAction;
 
-const G4int kMaxAbsor = 10;                        // 0 + 8
+const G4int kMaxAbsor = 10;                        // 0 + 9
 
 class G4GlobalMagFieldMessenger;
 
@@ -71,14 +72,14 @@ public:
                 
      
   virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
+  //virtual void ConstructSDandField(EventAction* fEventAction);
      
 public:
 
   G4int       GetNbOfAbsor()             {return fNbOfAbsor;}
   G4Material* GetAbsorMaterial (G4int i) {return fAbsorMaterial[i];};
   G4double    GetAbsorThickness(G4int i) {return fAbsorThickness[i];};      
-  G4double    GetXfront        (G4int i) {return fXfront[i];};
+ // G4double    GetXfront        (G4int i) {return fXfront[i];};
   G4Material* GetWorldMaterial()         {return fDefaultMaterial;}
             
   G4double GetAbsorSizeZ()               {return fAbsorSizeZ;}; 
@@ -87,7 +88,7 @@ public:
   G4double GetWorldSizeZ()               {return fWorldSizeZ;}; 
   G4double GetWorldSizeXY()              {return fWorldSizeXY;}; 
 
-  G4LogicalVolume* GetLogPhotoCath() {return fPhotocath_log;}
+ // G4LogicalVolume* GetLogPhotoCath() {return fPhotocath_log;}
 
   
   void PrintParameters();
@@ -138,26 +139,30 @@ private:
   G4LogicalVolume* fLogicWorld;
   G4LogicalVolume* fLogicCal;
   G4LogicalVolume* fLogicAl;
-  G4LogicalVolume* fLogicA1;
-  G4LogicalVolume* fLogicA2;
-  G4LogicalVolume* fLogicA3;
-  G4LogicalVolume* fLogicA4;
 
-   G4VPhysicalVolume* physAl; 
-   G4VPhysicalVolume* physPTM;
+ //  G4VPhysicalVolume* physAl; 
+ //  G4VPhysicalVolume* physCal [10];
+ //  G4VPhysicalVolume* alPlatePV [10];
 
+  //  G4Box* fScint_box;
+  //  G4Box* fHousing_box;
+  //  G4LogicalVolume* fScint_log;
+  //  G4LogicalVolume* fHousing_log;
+  //  G4LogicalVolume* fPmt_log;
+   // G4LogicalVolume* fPhotocath_log;
+  //  G4LogicalVolume* fSphere_log;
 
+    G4LogicalVolume* cathodeLV;
+    G4LogicalVolume* alPlateLV;
+    G4LogicalVolume* lgTubeLV;
+    G4LogicalVolume* alShieldingLV;
+    G4LogicalVolume* lgLV;
 
-    G4Box* fScint_box;
-    G4Box* fHousing_box;
-  //  G4Tubs* fPmt;
-  //  G4Tubs* fPhotocath;
-    //G4Sphere* fSphere;
-    G4LogicalVolume* fScint_log;
-    G4LogicalVolume* fHousing_log;
-    G4LogicalVolume* fPmt_log;
-    G4LogicalVolume* fPhotocath_log;
-    G4LogicalVolume* fSphere_log;
+  G4VPhysicalVolume* lgPV;
+  G4VPhysicalVolume* alPlatePV;
+  G4VPhysicalVolume* alCoverPV;
+  G4VPhysicalVolume* lgTubePV;
+  G4VPhysicalVolume* modulePV[9]; // 0 + 9
 //0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0
 
   DetectorMessenger* fDetectorMessenger;
@@ -169,6 +174,7 @@ private:
   void DefineMaterials();
   void ComputeParameters();
   void SurfaceProperties();
+  void ConstructSDandField();
   G4VPhysicalVolume* ConstructVolumes();
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
@@ -177,4 +183,3 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

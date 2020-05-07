@@ -44,6 +44,8 @@
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
+#include "FTFP_BERT.hh"
+#include "G4OpticalPhysics.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -72,11 +74,16 @@ int main(int argc,char** argv) {
   G4RunManager* runManager = new G4RunManager;
 #endif
   //set mandatory initialization classes
+
+   auto physicsList = new FTFP_BERT();
+    physicsList->RegisterPhysics(new G4OpticalPhysics());
+   runManager->SetUserInitialization(physicsList);
+
+ /* PhysicsList* phys = new PhysicsList;
+  runManager->SetUserInitialization(phys);*/
+
   DetectorConstruction* det = new DetectorConstruction;
   runManager->SetUserInitialization(det);
-
-  PhysicsList* phys = new PhysicsList;
-  runManager->SetUserInitialization(phys);
   
   runManager->SetUserInitialization(new ActionInitialization(det));
 

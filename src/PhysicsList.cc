@@ -35,15 +35,24 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
+
+#include "G4MTRunManager.hh"
+#include "G4RunManager.hh"
+
+
+
+
 #include "HadronElasticPhysicsHP.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
-#include "G4HadronPhysicsQGSP_BIC_HP.hh"
+//#include "G4HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronPhysicsINCLXX.hh"
 #include "G4IonPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
 #include "G4StoppingPhysics.hh"
 #include "GammaNuclearPhysics.hh"
+#include "G4OpticalPhysics.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
 
 #include "ElectromagneticPhysics.hh"
 #include "G4EmStandardPhysics.hh"
@@ -57,6 +66,15 @@
 PhysicsList::PhysicsList()
 :G4VModularPhysicsList()
 {
+/*
+auto runManager = new G4MTRunManager();
+
+auto physicsList = new FTFP_BERT();
+physicsList->RegisterPhysics(new G4OpticalPhysics());
+runManager->SetUserInitialization(physicsList);*/
+
+
+
   G4int verb = 1;
   SetVerboseLevel(verb);
   
@@ -66,10 +84,13 @@ PhysicsList::PhysicsList()
   new G4UnitDefinition( "mm2/g",  "mm2/g", "Surface/Mass", mm2/g);
   new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
     
-  // Hadron Elastic scattering
+
+
+ // Hadron Elastic scattering
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
   
   // Hadron Inelastic Physics
+  //RegisterPhysics( new G4HadronPhysicsQGSP_BERT(verb));
   RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
@@ -80,16 +101,21 @@ PhysicsList::PhysicsList()
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
   
   // stopping Particles
-  ////RegisterPhysics( new G4StoppingPhysics(verb));
+  //RegisterPhysics( new G4StoppingPhysics(verb)); //should not been here
       
   // Gamma-Nuclear Physics
   RegisterPhysics( new GammaNuclearPhysics("gamma"));
   
   // EM physics
   RegisterPhysics(new ElectromagneticPhysics());
-  ////RegisterPhysics(new G4EmStandardPhysics());
+  //RegisterPhysics(new G4EmStandardPhysics());
   ////RegisterPhysics(new G4EmStandardPhysics_option3());
   
+
+ //Optical Photons
+
+  RegisterPhysics(new G4OpticalPhysics());
+
   // Decay
   RegisterPhysics(new G4DecayPhysics());
 
@@ -98,6 +124,9 @@ PhysicsList::PhysicsList()
 
   // Step Max
   RegisterPhysics(new StepMaxBuilder());
+
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

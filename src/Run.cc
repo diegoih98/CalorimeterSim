@@ -283,7 +283,7 @@ void Run::EndOfRun()
   //particles count in absorbers
   //
   for (G4int k=1; k<= nbOfAbsor; k++) {
-  G4cout << "\n List of generated particles in Pb glass counter " << k << ":" << G4endl;
+  G4cout << "\n List of generated particles in Pb glass counter (count>100) " << k << ":" << G4endl;
 
     std::map<G4String,ParticleData>::iterator itc;               
     for (itc  = fParticleDataMap[k].begin();
@@ -294,14 +294,14 @@ void Run::EndOfRun()
        G4double eMean = data.fEmean/count;
        G4double eMin = data.fEmin;
        G4double eMax = data.fEmax;    
-     // if(count > 100){
+      if(count > 100){
        G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
               << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
               << "\t( "  << G4BestUnit(eMin, "Energy")
               << " --> " << G4BestUnit(eMax, "Energy") 
               << ") " 
               << "Mean Number of Particles Produced " << count/numberOfEvent <<G4endl;         
-     // }  
+      }  
     }
   }
   //particles emerging from absorbers
