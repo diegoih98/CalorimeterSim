@@ -1,37 +1,5 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
-/// \file Run.cc
-/// \brief Implementation of the Run class
-//
-// $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "Run.hh"
+
 #include "DetectorConstruction.hh"
 
 #include "EventAction.hh"
@@ -97,7 +65,9 @@ void Run::ParticleCount(G4int k, G4String name, G4double Ekin)
     ParticleData& data = it->second;
     data.fCount++;
     data.fEmean += Ekin;
-    //update min max
+   
+    //Update min & max
+    
     G4double emin = data.fEmin;
     if (Ekin < emin) data.fEmin = Ekin;
     G4double emax = data.fEmax;
@@ -140,18 +110,20 @@ void Run::Merge(const G4Run* run)
 {
   const Run* localRun = static_cast<const Run*>(run);
   
-  // pass information about events
+  // Retrieve information about events
 
-  // pass information about primary particle
+  // Retrieve information about primary particle
   fParticle = localRun->fParticle;
   fEkin     = localRun->fEkin;
 
-  // Edep in absorbers
+  // Energy deposition in calorimeter counters
   //
   G4int nbOfAbsor = fDetector->GetNbOfAbsor();
   for (G4int i=1; i<=nbOfAbsor; ++i) {
     fEdeposit[i]  += localRun->fEdeposit[i];
+    
     // min, max
+    
     G4double min,max;
     min = localRun->fEmin[i]; max = localRun->fEmax[i];
     if (fEmin[i] > min) fEmin[i] = min;
@@ -160,14 +132,14 @@ void Run::Merge(const G4Run* run)
    
   for (G4int i=0; i<3; ++i)  fStatus[i] += localRun->fStatus[i];
   
-  // total Edep
+  // Total energy deposition
   fTotEdep[0] += localRun->fTotEdep[0];
   G4double min,max;
   min = localRun->fTotEdep[1]; max = localRun->fTotEdep[2];
   if (fTotEdep[1] > min) fTotEdep[1] = min;
   if (fTotEdep[2] < max) fTotEdep[2] = max;
 
-  //map: processes count
+  //Processes count
   std::map<G4String,G4int>::const_iterator itp;
   for ( itp = localRun->fProcCounter.begin();
         itp != localRun->fProcCounter.end(); ++itp ) {
@@ -182,7 +154,7 @@ void Run::Merge(const G4Run* run)
     }  
   }
   
-  //map: created particles in absorbers count
+  // Particles created in calorimeters counters (count)
   for (G4int k=0; k<=nbOfAbsor; ++k) {
     std::map<G4String,ParticleData>::const_iterator itc;
     for (itc = localRun->fParticleDataMap[k].begin(); 
@@ -219,8 +191,8 @@ void Run::EndOfRun()
     G4int prec = 5, wid = prec + 2;  
     G4int dfprec = G4cout.precision(prec);
 
-  //run conditions
-  //     
+  //Run conditions
+  
   G4String partName = fParticle->GetParticleName();
   G4int nbOfAbsor   = fDetector->GetNbOfAbsor();
   
@@ -243,7 +215,7 @@ void Run::EndOfRun()
   
   G4cout.precision(3);
   
-  //frequency of processes
+  //Frequency of processes
   //
   G4cout << "\n Process calls frequency :" << G4endl;
   G4int index = 0;
@@ -257,7 +229,7 @@ void Run::EndOfRun()
   }
   G4cout << G4endl;
   
-  //Edep in absorbers
+  //Energy deposition in calorimeter counters
   //
   for (G4int i=1; i<= nbOfAbsor; i++) {
      fEdeposit[i] /= numberOfEvent;
@@ -280,7 +252,7 @@ void Run::EndOfRun()
       << ")" << G4endl;
   }
 
-  //particles count in absorbers
+  //Particles generated in calorimeter counters (count) 
   //
   for (G4int k=1; k<= nbOfAbsor; k++) {
   G4cout << "\n List of generated particles in Pb glass counter (count>100) " << k << ":" << G4endl;
@@ -304,8 +276,8 @@ void Run::EndOfRun()
       }  
     }
   }
-  //particles emerging from absorbers
-  //
+  //Particles emerging from calorimeter
+
   G4cout << "\n List of particles emerging from Pb glass counters :" << G4endl;
   
   std::map<G4String,ParticleData>::iterator itc;
@@ -336,8 +308,8 @@ void Run::EndOfRun()
     << "\n Nb of events with primary absorbed = "  << absorbed  << " %,"
     << "   transmit = "  << transmit  << " %," << G4endl;
 
-  // normalize histograms of longitudinal energy profile
-  //
+  // Normalize histograms of longitudinal energy profile
+  
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   G4int ih = 10;
   G4double binWidth = analysisManager->GetH1Width(ih)
@@ -345,11 +317,13 @@ void Run::EndOfRun()
   G4double fac = (1./(numberOfEvent*binWidth))*(mm/MeV);
   analysisManager->ScaleH1(ih,fac);
 
-  //remove all contents in fProcCounter, fCount 
+  //Remove all contents in fProcCounter, fCount 
+  
   fProcCounter.clear();
   for (G4int k=0; k<= nbOfAbsor; k++) fParticleDataMap[k].clear();
 
-  // reset default formats
+  //Reset default formats
+  
   G4cout.precision(dfprec);
 }
 
