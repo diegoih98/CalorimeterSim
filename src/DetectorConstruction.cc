@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file DetectorConstruction.cc
-/// \brief Implementation of the DetectorConstruction class
-//
-// $Id: DetectorConstruction.cc 77288 2013-11-22 10:52:58Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
