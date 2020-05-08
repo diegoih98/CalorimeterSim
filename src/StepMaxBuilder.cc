@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file StepMaxBuilder.cc
-/// \brief Implementation of the StepMaxBuilder class
-//
-// $Id: StepMaxBuilder.cc 66587 2012-12-21 11:06:44Z ihrivnac $
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepMaxBuilder.hh"
 
