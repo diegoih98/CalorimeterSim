@@ -35,7 +35,7 @@ void SensitiveDetector::Initialize(G4HCofThisEvent*)
 {
   //  nhits = 0;
   qe_nhits = 0;
-   p2c=3.8e-13;                     // photon-to-charge ratio (gain)
+   p2c=3.8e-13;                     // Photon-to-charge ratio (gain)
 }
 
 G4bool SensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
@@ -63,7 +63,7 @@ void SensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
 
 
-  G4double q_dep = qe_nhits * p2c;      // deposited charge
+  G4double q_dep = qe_nhits * p2c;      // Deposited charge
     
     if(q_dep > 0){
         G4cout << "Hit: " << qe_nhits << " photons" << G4endl;
