@@ -1,0 +1,51 @@
+# $Id: water.mac 82462 2014-06-23 10:45:28Z gcosmo $
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+#
+/run/initialize
+#
+/run/setCut 100 um
+#
+#/gps/verbose 1
+/gps/particle pi-
+
+
+#Circle distribution
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/centre 0 0 -20 cm
+/gps/pos/radius 1 mm
+/gps/direction 0 0 1
+
+#Energy distribution
+/gps/ene/type Gauss
+/gps/ene/mono .4 GeV
+/gps/ene/sigma 0.002 GeV  #Energy spread 0.5%
+
+
+
+
+   /analysis/setFileName  Pions(400MeV)(Spread)
+   /analysis/h1/set  1 120 0.  20 eV	#edep profile
+   /analysis/h1/set  2 120 0.  20 eV		#edep profile
+   /analysis/h1/set  3 120 1.77   4.77 eV		#edep profile
+   #/analysis/h1/set  4 120 0.  0.5 MeV		#edep profile
+   #/analysis/h1/set  5 120 0.  2.0 MeV		#edep profile
+   #/analysis/h1/set  6 120 0.  0.5 MeV		#edep profile
+   #/analysis/h1/set  7 120 0.  0.5 MeV		#edep profile
+   #/analysis/h1/set  8 120 0.  0.5 MeV		#edep profile
+   #/analysis/h1/set  9 120 0.  0.5 MeV		#edep profile
+   #/analysis/h1/set 10 120 0.  350. mm		#edep profile
+   #/analysis/h1/set 11 120 0.  4. MeV		#edep profile
+   /analysis/h1/set 12 400 0.  50000.	        #edep profile
+   /analysis/h1/set 13 400 0.  3000. 		#edep profile
+   /analysis/h1/set 14 400 0  600. MeV		#edep profile
+   #/analysis/h1/set 15 400 0  3000		#edep profile
+   /analysis/h1/set 15 400 0  3500 		#edep profile
+
+/run/printProgress 1
+#/run/beamOn 20
+/run/beamOn 5000
