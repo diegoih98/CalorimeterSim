@@ -1,37 +1,3 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
-/// \file ElectromagneticPhysics.cc
-/// \brief Implementation of the ElectromagneticPhysics class
-//
-// $Id: ElectromagneticPhysics.cc 71570 2013-06-18 10:14:44Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "ElectromagneticPhysics.hh"
 
 #include "G4BuilderType.hh"
@@ -97,7 +63,7 @@ ElectromagneticPhysics::~ElectromagneticPhysics()
 
 void ElectromagneticPhysics::ConstructProcess()
 {
-/*
+
   theCerenkovProcess           = new G4Cerenkov("Cerenkov");
   theScintillationProcess      = new G4Scintillation("Scintillation");
   theAbsorptionProcess         = new G4OpAbsorption();
@@ -109,7 +75,7 @@ void ElectromagneticPhysics::ConstructProcess()
 
   theCerenkovProcess->SetMaxNumPhotonsPerStep(300);
   theCerenkovProcess->SetMaxBetaChangePerStep(10.0);
-  theCerenkovProcess->SetTrackSecondariesFirst(true);*/
+  theCerenkovProcess->SetTrackSecondariesFirst(true);
 
 
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
@@ -123,8 +89,8 @@ void ElectromagneticPhysics::ConstructProcess()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
  
-
-   /* if (theCerenkovProcess->IsApplicable(*particle)) {
+     //Necessary for optical photons creation
+   if (theCerenkovProcess->IsApplicable(*particle)) {
       pmanager->AddProcess(theCerenkovProcess);
       pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
     }
@@ -135,7 +101,7 @@ void ElectromagneticPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
       pmanager->AddDiscreteProcess(theMieHGScatteringProcess);
       pmanager->AddDiscreteProcess(theBoundaryProcess);
-    }*/
+    }
 
 
     
@@ -145,10 +111,10 @@ void ElectromagneticPhysics::ConstructProcess()
       ph->RegisterProcess(new G4ComptonScattering,   particle);
       ph->RegisterProcess(new G4GammaConversion,     particle);
 
-    /*  pmanager->AddDiscreteProcess(theAbsorptionProcess);
+      pmanager->AddDiscreteProcess(theAbsorptionProcess);
       pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
       pmanager->AddDiscreteProcess(theMieHGScatteringProcess);
-      pmanager->AddDiscreteProcess(theBoundaryProcess);*/
+      pmanager->AddDiscreteProcess(theBoundaryProcess);
        
     } else if (particleName == "e-") {
     

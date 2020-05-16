@@ -102,9 +102,7 @@ DetectorConstruction::DetectorConstruction()
   DefineMaterials();
   SetAbsorMaterial("CalMaterial");
 
-  // create commands for interactive definition of the calorimeter
   fDetectorMessenger = new DetectorMessenger(this);
- // fEventAction = new EventAction(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,10 +123,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::DefineMaterials()
 {
-  // Default materials
 
   G4NistManager* man = G4NistManager::Instance();
-  //  man->SetVerbose(1);
+
   fWorldMaterial = man->FindOrBuildMaterial("G4_AIR");
   fAbsMaterial   = man->FindOrBuildMaterial("G4_Al");
 
@@ -179,7 +176,7 @@ void DetectorConstruction::DefineMaterials()
 
 
 
-  //Lead Glass
+//Lead Glass Optical Propeties
 
     G4double refEnergy[] = {1.24*eV, 1.27*eV, 1.29*eV, 1.32*eV, 1.35*eV, 
                             1.38*eV, 1.41*eV, 1.44*eV, 1.48*eV, 1.51*eV, 
@@ -223,22 +220,7 @@ void DetectorConstruction::DefineMaterials()
 
 G4Material* DetectorConstruction::MaterialWithSingleIsotope( G4String name,
                            G4String symbol, G4double density, G4int Z, G4int A)
-{
- // define a material from an isotope
- //
- G4int ncomponents;
- G4double abundance, massfraction;
-
- G4Isotope* isotope = new G4Isotope(symbol, Z, A);
- 
- G4Element* element  = new G4Element(name, symbol, ncomponents=1);
- element->AddIsotope(isotope, abundance= 100.*perCent);
- 
- G4Material* material = new G4Material(name, density, ncomponents=1);
- material->AddElement(element, massfraction=100.*perCent);
-
- return material;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -254,10 +236,10 @@ void DetectorConstruction::ComputeParameters()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
-  // complete the Calor parameters definition
+
   ComputeParameters();
 
-  // Cleanup old geometry
+// Cleanup old geometry
   G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
@@ -270,11 +252,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
     G4String matname = fAbsorMaterial[k]->GetName();
          }
 
+// World
 
-
-  //
-  // World
-  //
   G4Box* worldSolid = new G4Box("World", fWorldSizeXY/2,fWorldSizeXY/2,fWorldSizeZ/2);   //size
   G4LogicalVolume* worldLV =  new G4LogicalVolume(worldSolid, fDefaultMaterial, "WorldLV");
   fPhysiWorld = 
@@ -287,77 +266,55 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                        0);                      //copy number
 
 
-  //
-  // * 0'. Module world (moduleLV)
+
+// Module  (moduleLV)
   //G4Trap* moduleTrapSolid = new G4Trap("ModuleTrapSolid", 122.4*mm, 340.2*mm, 135.4*mm, 113.4*mm);
   G4Trap* moduleTrapSolid = new G4Trap("ModuleTrapSolid", 126.*mm, 344.*mm, 139.*mm, 117.*mm);
   G4Box* moduleBoxSolid = new G4Box("ModuleBoxSolid", 69.5*mm, 100.*mm, 63*mm/*67.7*mm, 20.*mm, 61*mm*/);
   G4UnionSolid* moduleSolid = new G4UnionSolid("ModuleSolid", moduleTrapSolid, moduleBoxSolid,
                               G4Transform3D(G4RotationMatrix(), G4ThreeVector(5.5*mm, -272.*mm /*-190.1*mm*/, 0)));
   G4LogicalVolume* moduleLV = new G4LogicalVolume(moduleSolid, fDefaultMaterial, "ModuleLV");
-  //
-  // * 1. Lead-glass (lgLV)
+
+  // Lead-glass (lgLV)
   G4Trap* lgTrapSolid = new G4Trap("LGTrapSolid", 122.*mm, 340.*mm, 135.*mm, 113.*mm);
   G4Tubs* lgTubeSolid = new G4Tubs("LGTubeSolid", 0, 38*mm, /*30.*mm*/15.*mm, 0, 360.*deg);
   G4UnionSolid* lgSolid = new G4UnionSolid("LGSolid", lgTrapSolid, lgTubeSolid,
-                          G4Transform3D(G4RotationMatrix().rotateX(90.*deg), G4ThreeVector(5.5*mm, /*-200.*mm*/ -185.*mm, 0)));
+                         G4Transform3D(G4RotationMatrix().rotateX(90.*deg), G4ThreeVector(5.5*mm, /*-200.*mm*/ -185.*mm, 0)));
   lgLV = new G4LogicalVolume(lgSolid,fCalMaterial, "LGLV");
- // lgLV = new G4LogicalVolume(lgTrapSolid,fCalMaterial, "LGLV");
-  //
-  // * 2. Al plate
+  //lgLV = new G4LogicalVolume(lgTrapSolid,fCalMaterial, "LGLV");
+  
+  //Al plate "flange" (alPlateLV)
   G4Box* PlateSolid = new G4Box("PlateSolid", 67.5*mm, 0.2*mm, 61*mm);
   G4Tubs* TubeSolid = new G4Tubs("TubeSolid", 0, 38.*mm, 35.*mm, 0, 360.*deg);
   G4SubtractionSolid* alPlateSolid = new G4SubtractionSolid("AlPlateSolid", PlateSolid, TubeSolid, G4Transform3D(G4RotationMatrix().rotateX(90.*deg), G4ThreeVector(0,0,0)));
               alPlateLV = new G4LogicalVolume(alPlateSolid, fAbsMaterial, "AlPlateLV");
 
-
-  //
-  // * 3. PMT Photocathode (cathodeLV)
+  //PMT Photocathode (cathodeLV)
   G4Tubs *cathodeSolid= new G4Tubs("CathodeSolid", 0, 38.*mm, /*1.1*mm*/ /*0.2*mm*/ 0.1*mm  , 0, 360.*deg);
   cathodeLV = new G4LogicalVolume(cathodeSolid, fCalMaterial, "CathodeLV");
-  //----------------------------------------------------------------------------------
+
   
   
   
-  //----------------------------------------------------------------------------------
-  // ** Volume Placement in WorldLV **
-  //----------------------------------------------------------------------------------
-  //
-  // * Define relative rotation and position of each LV w.r.t. ModuleLV
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+//Placement
+
   G4Transform3D alPlatePlacement = G4Transform3D(G4RotationMatrix(), G4ThreeVector(5.5*mm, -170.3*mm /*-180.*mm*/, 0));
   G4Transform3D lgPlacement = G4Transform3D(G4RotationMatrix(), G4ThreeVector(0,-0.1*mm, 0));
-  G4Transform3D cathodePlacement = G4Transform3D(G4RotationMatrix().rotateX(90.*deg), G4ThreeVector(5.5*mm, /*-170.3*mm*/ /*-231.2*mm*/-200.2*mm, 0));
-  //
-  // * Place logical volumes onto ModuleLV
+  G4Transform3D cathodePlacement = G4Transform3D(G4RotationMatrix().rotateX(90.*deg), G4ThreeVector(5.5*mm, /*-170.3*mm*/ -200.2*mm, 0));
+
   G4bool bCheckOverlaps = false;
             alPlatePV = new G4PVPlacement(alPlatePlacement, alPlateLV, "ECalAlPlate", moduleLV, false, 0, bCheckOverlaps);
             lgPV = new G4PVPlacement(lgPlacement, lgLV, "ECalPbGlass", moduleLV, false, 1/*0*/, bCheckOverlaps);
   new G4PVPlacement(cathodePlacement, cathodeLV, "ECalPMTCathode", moduleLV, false, 0, bCheckOverlaps);
-  //
-  // * Place 9 moduleLVs onto WorldLV 
-  //
-  //  (y-axis)
-  //     i
-  //     ^               copyNo(i, j)
-  //     |   -------------------------------------
-  //     |   |  7(1, -1) |  8(0, 1)  |  9(1, 1)  |
-  //     |   -------------------------------------
-  //     |   |  4(0, -1) |  5(0, 0)  |  6(0, 1)  |
-  //     |   -------------------------------------
-  //     |   | 1(-1, -1) | 2(-1, 0)  | 3(-1, 1)  |
-  //     |   -------------------------------------
-  //     ------------------------------------------> j 
-  //
-  //           (i: row index, j: column index)
-  //
+
   G4RotationMatrix moduleRot = G4RotationMatrix().rotateX(-90.*deg);
   G4RotationMatrix columnRot;
-  //
+
   G4double tiltAngle = -3.70221285*deg;
   G4ThreeVector pos;
-  //
- // G4VPhysicalVolume* modulePV[9];
-  //
+
   for(G4int i = -1; i <= 1; i++){
     for(G4int j = -1; j <= 1; j++){
       G4int copyNo = 3*i + j + 5;
@@ -372,24 +329,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                             moduleLV, "ECalWorld", worldLV, true, copyNo, bCheckOverlaps);
     }
   }
-  //----------------------------------------------------------------------------------
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  //----------------------------------------------------------------------------------
-  // ** Set Optical Border Surfaces **
-  //----------------------------------------------------------------------------------
-  //
+//Surface Optical Porperties
 
-   
-SurfaceProperties();
+     SurfaceProperties();
   
-  
-  
-  //----------------------------------------------------------------------------------
-  // ** Set Visual Attributes **
-  //----------------------------------------------------------------------------------
-  //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+//Visualisation 
 
   worldLV->SetVisAttributes(G4VisAttributes::GetInvisible());
   moduleLV->SetVisAttributes(G4VisAttributes::GetInvisible());
@@ -406,7 +356,6 @@ SurfaceProperties();
   //Ccolor -> SetForceAuxEdgeVisible(true);
   Ccolor -> SetForceSolid(true);
   alPlateLV->SetVisAttributes(Ccolor);
-    //moduleLV->SetVisAttributes(Ccolor);
 
   G4VisAttributes* colorr = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
   //colorr -> SetForceAuxEdgeVisible(true);
@@ -454,11 +403,6 @@ void DetectorConstruction::SurfaceProperties(){
    G4double refl_Al[num];
   for(int i=0; i<num; i++) refl_Al[i] = 1.;
    assert(sizeof(refl_Al) == sizeof(ephoton));
-/*G4double refl_Al[] = {.90, .926, .92, .916, .914, 
-                      .916, .907, .901, .868, .89
-                      };
-   assert(sizeof(refl_Al) == sizeof(ephoton));*/
-
 
   G4MaterialPropertiesTable* AlSurfaceProperty = new G4MaterialPropertiesTable();
    AlSurfaceProperty->AddProperty("REFLECTIVITY",ephoton,refl_Al,num);
@@ -471,11 +415,6 @@ void DetectorConstruction::SurfaceProperties(){
    G4double refl_Taped[num];
   for(int i=0; i<num; i++) refl_Taped[i] = 1.;
    assert(sizeof(refl_Taped) == sizeof(ephoton));
-   
-/*G4double refl_Taped[] = {  .90, .926, .92, .916, .914, 
-                           .916, .907, .901, .868, .89
-                           };
-   assert(sizeof(refl_Taped) == sizeof(ephoton));*/
 
    G4MaterialPropertiesTable* TapedSurfaceProperty = new G4MaterialPropertiesTable();
    TapedSurfaceProperty->AddProperty("REFLECTIVITY",ephoton,refl_Taped,num);
@@ -484,16 +423,11 @@ void DetectorConstruction::SurfaceProperties(){
    TapedSurface -> SetMaterialPropertiesTable(TapedSurfaceProperty);
 
 
-  //**Create logical skin surfaces
+  //Logical skin surfaces
 
     new G4LogicalBorderSurface("ECalMirrorBorderSurface", lgPV, alPlatePV, TapedSurface);
   for(G4int copyNo = 1; copyNo <= 9; copyNo++)
     new G4LogicalBorderSurface("LGTapedBorderSurface", lgPV, modulePV[copyNo - 1], AlSurface);
-
-
-
-
-
 
 }
 
@@ -502,7 +436,7 @@ void DetectorConstruction::SurfaceProperties(){
 
 void DetectorConstruction::SetNbOfAbsor(G4int ival)
 {
-  // set the number of Crystals 
+  // set the number of Counters 
   //
   if (ival < 1 || ival > (kMaxAbsor-1))
     { G4cout << "\n ---> warning from SetfNbOfAbsor: "

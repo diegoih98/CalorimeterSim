@@ -22,13 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-/// \file HistoManager.cc
-/// \brief Implementation of the HistoManager class
-//
-//
-// $Id: HistoManager.cc 95740 2016-02-23 09:34:37Z gcosmo $
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,9 +48,6 @@ HistoManager::~HistoManager()
 
 void HistoManager::Book()
 {
-  // Create or get analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
@@ -93,13 +83,6 @@ void HistoManager::Book()
   G4int nbins = 100;
   G4double vmin = 0.;
   G4double vmax = 100.;
-
- /* // Create all histograms as inactivated 
-  // as we have not yet set nbins, vmin, vmax
-  for (G4int k=0; k<kMaxHisto; k++) {
-    G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
-   analysisManager->SetH1Activation(ih, false);
-  }*/
 
 G4int ih = analysisManager->CreateH1(id[0], title[0], nbins, vmin, vmax);
    analysisManager->SetH1Activation(ih, false);

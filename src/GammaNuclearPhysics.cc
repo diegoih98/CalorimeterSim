@@ -22,13 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-/// \file GammaNuclearPhysics.cc
-/// \brief Implementation of the GammaNuclearPhysics class
-//
-// $Id: GammaNuclearPhysics.cc 66587 2012-12-21 11:06:44Z ihrivnac $
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "GammaNuclearPhysics.hh"

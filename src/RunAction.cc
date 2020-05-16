@@ -1,4 +1,5 @@
 #include "RunAction.hh"
+
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
 #include "Run.hh"
@@ -35,10 +36,10 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {  
-  // show Rndm status
+  // Show Rndm status
    if (isMaster)  G4Random::showEngineStatus();
    
-  // keep run condition
+  // Keep run condition
   if ( fPrimary ) { 
     G4ParticleDefinition* particle 
       = fPrimary->GetParticleGun()->GetParticleDefinition();
@@ -46,7 +47,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
     fRun->SetPrimary(particle, energy);
   }
         
-  //histograms
+  //Histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->IsActive() ) {
@@ -60,14 +61,14 @@ void RunAction::EndOfRunAction(const G4Run*)
 { 
   if (isMaster) fRun->EndOfRun();  
   
-  // save histograms
+  // Save histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->IsActive() ) {  
     analysisManager->Write();
     analysisManager->CloseFile();
   }    
  
-  // show Rndm status
+  // Show Rndm status
     if (isMaster) G4Random::showEngineStatus();
 }
 

@@ -22,16 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-/// \file HadronElasticPhysicsHP.cc
-/// \brief Definition of the HadronElasticPhysicsHP class
-//
-// $Id:HadronElasticPhysicsHP.cc 71037 2013-06-10 09:20:54Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-//
-// HP models for neutron < 20 MeV
 
 #include "HadronElasticPhysicsHP.hh"
 
